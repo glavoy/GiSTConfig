@@ -1,0 +1,63 @@
+Instructions for Excel data dictionary:
+	1. First row must be the header row
+	2. skip must be of the format - skiptype: if fieldname_to_check condition value, skip to fieldname_to_skip_to
+		where:	starts with "skiptype: " (skiptype, colon, space)
+				skiptype - "postskip" or "preskip"
+				fieldname_to_check - which field name to check
+				condition: =, <, >, <=, >=, <>, 'does not contain', 'contains'
+				value - value to check against the value in fieldname_to_check
+				fieldname_to_skip_to - where to skip
+		It is also very important to have SINGLE SPACES between each part
+				
+				
+	3. For fields that are QuestionType = text and FieldType = text, you should specify the MaxCharacters
+	4. DontKnow, Refuse, NA - each are specified in their own column.  Must be TRUE or blank.
+	5. Do not include DontKnow, Refuse, NA in radio/checkbox responses
+	6. LowerRange and UpperRange are continuous and both have to have a number or both be blank
+	7. DD must have the same 13 columns (this number will likely change)
+	8. Responses must begin with "1:" - (number, colon)
+	
+	9. QuestionType:
+						Questionnaire	Comment
+		radio: 			Radio Buttons	fieldtype MUST be integer
+		combobox:		Dropdown		fieldtype MUST be integer
+		checkbox:		Checkboxes		fieldtype MUST be text
+		text:			TextBox			should specify the MaxCharacters
+		date:			Date Picker
+		information:	Displays information on screen. Not saved to database		
+		automatic:		Question is automatically responded to by the software.
+						Code MUST to be written in the AddAutomatic() function
+
+	10. FieldType:
+						Database		Comment
+		text: 			Short Text		Allows any character, default is 255 characters
+		datetime:		Date/Time
+		date:			Date/Time
+		phone_num:		Short Text		Allows only numbers in Text box; 10 characters in the database
+		integer:		Long Integer
+		text_integer	Long Integer	Allows only numbers in Text box
+		text_decimal	Decimal			Allows only numbers and decimal point in Text box; Precision = 13; Scale = 5
+		hourmin			Short Text		Allows only numbers and colon in Text box; 5 characters in the database
+		
+	11. All rows that are not questions, must be merged cells
+	12. All Worksheets that contain a data dictionary must end in "_dd"
+	
+	13. Logic checks:
+		dynamic: if intvinit2 <> intvinit, error_message This does not match your previous entry!
+
+		fixed: if month = 2 'and' day = 30, error_message throw an error
+
+
+To do:
+ - Allow spreadsheet to have additional rows that are not questions (Rows that are not questions, must be merged (except first row))
+ - Allow user to select spreadsheet rather than hard-coding it
+ - Add functionality to create xml files for each worksheet in an Excel spreadsheet
+ - Allow user to choose folder where to save the xml files and the database
+ - Create a table in the MS Access for each worksheet in the Excel spreadsheet
+ - Add checks to the software to verify the integrity of the Excel spreadsheet, including:
+	- if upper range has a number, then lower range must also have a number
+	- make sure there are no empty fieldnames - especially at the end of the file
+	- ensure no duplicate fieldnames
+	- ensure QuestionType, FieldName, FieldType are valid types
+	- ensure DontKnow.Refuse.NA only contain 'TRUE' or blank
+	

@@ -18,30 +18,37 @@ namespace generatexml
             InitializeComponent();
         }
 
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+            // Make sure the 'Both' radio button is checked
+            radioButtonBoth.Checked = true;
+
+            // Show version
+            labelVersion.Text = string.Concat("Version: ", swVer);
+        }
+
+
+
         // Version
-        readonly string swVer = "2021-03-20";
+        readonly string swVer = "2021-11-08";
 
         // Path to Excel file
-        //readonly string excelFile = "D:\\Sapphire Dev Tools\\GistConfig\\excel\\GistTest.xlsx";
         // Feel free to change this to whatever you want
-        //readonly string excelFile = "D:\\Sapphire Dev Tools\\Sapphire Data Dictionary\\SAPPHIRE_Treatment_HTN_2021_03_13.xlsx";
-        readonly string excelFile = "D:\\Sapphire Dev Tools\\Sapphire Data Dictionary\\SAPPHIRE_Prevention_2021_03_20.xlsx";
-        //readonly string excelFile = "C:\\Temp\\COVID_Surveillance_Data_Dictionary_2020_12_03.xlsx";
-        //
+        readonly string excelFile = "C:\\IDRC\\SONET\\DataDictionary\\SONET Data Dictionary 2021-11-08.xlsx";
 
         // Path to XML file
-        //readonly string xmlPath = "D:\\Sapphire Dev Tools\\xml\\test\\";
-        readonly string xmlPath = "D:\\Sapphire Dev Tools\\xml\\dcp\\";
-        //readonly string xmlPath = "D:\\Sapphire Dev Tools\\xml\\htn\\";
-        
+        // Feel free to change this to whatever you want
+        readonly string xmlPath = "C:\\Temp\\";
 
         // Path to log file
-        readonly string logfilePath = "D:\\Sapphire Dev Tools\\";
+        // Feel free to change this to whatever you want
+        readonly string logfilePath = "C:\\Temp\\";
 
         // Path to MS Access database
-        //readonly string accessDB = "D:\\Sapphire Dev Tools\\Access db\\test.mdb";
-        readonly string accessDB = "D:\\Sapphire Dev Tools\\Access db\\dynamicprevention.mdb";
-        //readonly string accessDB = "D:\\Sapphire Dev Tools\\Access db\\HTNLinkage.mdb";
+        // Feel free to change this to whatever you want
+        readonly string accessDB = "C:\\SONET\\BaselineSurvey\\MSAccessDatabase\\SONET_Baseline.mdb";
+        //readonly string accessDB = "C:\\Temp\\SONET_Baseline.mdb";
 
         //log string
         public List<string> logstring = new List<string>();
@@ -71,42 +78,36 @@ namespace generatexml
         // List of Question objects
         public List<Question> QuestionList = new List<Question>();
 
-        // Show software version when form loads
-        private void Main_Load(object sender, EventArgs e)
-        {
-            // Show version
-            labelVersion.Text = string.Concat("Version: ", swVer);
-        }
-
 
         // Function when button is clicked
         private void ButtonXML_Click(object sender, EventArgs e)
         {
             try
             {
-
-
                 // Use a wait cursor
                 Cursor.Current = Cursors.WaitCursor;
 
                 //start logging of any error
                 logstring.Add("Checking field properties for " + excelFile);
 
-                // Delete the Access database if it exists
-                if (File.Exists(accessDB))
+
+                if (radioButtonBoth.Checked == true)
                 {
-                    File.Delete(accessDB);
+                    // Delete the Access database if it exists
+                    if (File.Exists(accessDB))
+                    {
+                        File.Delete(accessDB);
+                    }
+
+                    // Create the Access database
+                    string connectionString = string.Format("Provider={0}; Data Source={1}; Jet OLEDB:Engine Type={2}",
+                                                            "Microsoft.Jet.OLEDB.4.0",
+                                                            accessDB,
+                                                            5);
+                    ADOX.CatalogClass cat = new ADOX.CatalogClass();
+                    cat.Create(connectionString);
+                    cat = null;
                 }
-
-
-                // Create the Access database
-                string connectionString = string.Format("Provider={0}; Data Source={1}; Jet OLEDB:Engine Type={2}",
-                                                        "Microsoft.Jet.OLEDB.4.0",
-                                                        accessDB,
-                                                        5);
-                ADOX.CatalogClass cat = new ADOX.CatalogClass();
-                cat.Create(connectionString);
-                cat = null;
 
 
 
@@ -178,13 +179,21 @@ namespace generatexml
                         }
 
                         Console.WriteLine("Done Creating question list for "+ worksheet.Name);
+
+
                         //Check for duplicate columns in the question list b4 moving on
                         checkDuplicateColumns(QuestionList, worksheet.Name.Substring(0, worksheet.Name.Length - 3));
+
+
                         // Write to the XML file
                         WriteXML(worksheet.Name);
 
-                        // Add table to database
-                        CreateDatabase(worksheet.Name);
+                        if (radioButtonBoth.Checked == true)
+                        {
+                            // Add table to database
+                            CreateDatabase(worksheet.Name);
+                        }
+
                         
                     }
                 }
@@ -194,7 +203,6 @@ namespace generatexml
                 GC.WaitForPendingFinalizers();
                 xlWorkBook.Close(true, null, null);
                 xlApp.Quit();
-                //Marshal.ReleaseComObject(worksheet);
                 Marshal.ReleaseComObject(xlWorkBook);
                 Marshal.ReleaseComObject(xlApp);
                 logstring.Add("Done Building the xml file and the database, Check the xml and db folders");
@@ -217,8 +225,6 @@ namespace generatexml
 
             // Put the cursor back to normal
             Cursor.Current = Cursors.Default;
-            
-
         }
 
 
@@ -518,7 +524,7 @@ namespace generatexml
 
         // Added by Werick
         //////////////////////////////////////////////////////////////////////
-        // Function to generate the text for the skips
+        // Function to generate the text for the logid checks
         //////////////////////////////////////////////////////////////////////
         private string GenerateLogicChecks(string logic, string logicType)
         {
@@ -666,7 +672,7 @@ namespace generatexml
         private void checkQuestionType(List<Question> QList, string tblename)
         {
             string[] qtype = { "radio", "combobox", "checkbox", "text","date","information", "automatic"};
-            string[] ftype = { "text", "datetime", "date", "phone_num", "integer", "text_integer", "text_decimal", "text_id", "n/a" };
+            string[] ftype = { "text", "datetime", "date", "phone_num", "integer", "text_integer", "text_decimal", "text_id", "n/a", "hourmin" };
             foreach (Question question in QList)
             {
                 if (!qtype.Contains(question.questionType))
@@ -828,6 +834,10 @@ namespace generatexml
                                 newCol.Type = ADOX.DataTypeEnum.adVarWChar;
                                 newCol.DefinedSize = 10;
                                 break;
+                            case "hourmin":
+                                newCol.Type = ADOX.DataTypeEnum.adVarWChar;
+                                newCol.DefinedSize = 5;
+                                break;
                             case "text_decimal":
                                 newCol.Type = ADOX.DataTypeEnum.adNumeric;
                                 newCol.Precision = 13;
@@ -872,7 +882,5 @@ namespace generatexml
 
             }
         }
-
-
     }
 }
