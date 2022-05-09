@@ -31,11 +31,15 @@ namespace generatexml
 
 
         // Version
-        readonly string swVer = "2021-11-08";
+        readonly string swVer = "2022-04-14";
 
         // Path to Excel file
         // Feel free to change this to whatever you want
-        readonly string excelFile = "C:\\IDRC\\SONET\\DataDictionary\\SONET Data Dictionary 2021-11-08.xlsx";
+        //readonly string excelFile = "C:\\Geoff\\Applications\\GiSTConfig\\Excel\\GistTest.xlsx";
+        //readonly string excelFile = "D:\\IDRC\\OSDER\\DataDictionary\\OSDER Data Dictionary 2022-02-21.xlsx";
+        //readonly string excelFile = "C:\\IDRC\\Zumba\\Data Dictionary\\Zumba_Data_Dictionary_2022-01-27.xlsx";
+        readonly string excelFile = "C:\\IDRC\\OSDER\\DataDictionary\\OSDER Data Dictionary 2022-05-03.xlsx";
+
 
         // Path to XML file
         // Feel free to change this to whatever you want
@@ -47,8 +51,10 @@ namespace generatexml
 
         // Path to MS Access database
         // Feel free to change this to whatever you want
-        readonly string accessDB = "C:\\SONET\\BaselineSurvey\\MSAccessDatabase\\SONET_Baseline.mdb";
+        // readonly string accessDB = "C:\\ZUMBA\\HFS\\MSAccessDatabase\\ZUMBA.mdb";
         //readonly string accessDB = "C:\\Temp\\SONET_Baseline.mdb";
+        //readonly string accessDB = "D:\\IDRC\\OSDER\\MSAccessDatabase\\OSDER.mdb";
+        readonly string accessDB = "C:\\Temp\\Geoff.mdb";
 
         //log string
         public List<string> logstring = new List<string>();
@@ -821,11 +827,11 @@ namespace generatexml
                         switch (question.fieldType)
                         {
                             case "text_integer":
-                            case "text_id":
                             case "integer":
                                 newCol.Type = ADOX.DataTypeEnum.adInteger;
                                 break;
                             case "text":
+                            case "text_id":
                                 newCol.Type = ADOX.DataTypeEnum.adVarWChar;
                                 if (question.maxCharacters != -9)
                                     newCol.DefinedSize = question.maxCharacters;

@@ -37,9 +37,10 @@
             // ButtonXML
             // 
             this.ButtonXML.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ButtonXML.Location = new System.Drawing.Point(278, 135);
+            this.ButtonXML.Location = new System.Drawing.Point(371, 166);
+            this.ButtonXML.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ButtonXML.Name = "ButtonXML";
-            this.ButtonXML.Size = new System.Drawing.Size(223, 80);
+            this.ButtonXML.Size = new System.Drawing.Size(297, 98);
             this.ButtonXML.TabIndex = 0;
             this.ButtonXML.Text = "Generate XML file(s)\r\nand/or\r\nMS Access database";
             this.ButtonXML.UseVisualStyleBackColor = true;
@@ -49,18 +50,20 @@
             // 
             this.labelVersion.AutoSize = true;
             this.labelVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelVersion.Location = new System.Drawing.Point(273, 92);
+            this.labelVersion.Location = new System.Drawing.Point(364, 113);
+            this.labelVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(99, 25);
+            this.labelVersion.Size = new System.Drawing.Size(122, 29);
             this.labelVersion.TabIndex = 1;
             this.labelVersion.Text = "Version: ";
             // 
             // radioButtonBoth
             // 
             this.radioButtonBoth.AutoSize = true;
-            this.radioButtonBoth.Location = new System.Drawing.Point(296, 234);
+            this.radioButtonBoth.Location = new System.Drawing.Point(395, 288);
+            this.radioButtonBoth.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButtonBoth.Name = "radioButtonBoth";
-            this.radioButtonBoth.Size = new System.Drawing.Size(163, 17);
+            this.radioButtonBoth.Size = new System.Drawing.Size(212, 21);
             this.radioButtonBoth.TabIndex = 3;
             this.radioButtonBoth.Text = "Both Database and XML files";
             this.radioButtonBoth.UseVisualStyleBackColor = true;
@@ -68,22 +71,24 @@
             // radioButtonXMLOnly
             // 
             this.radioButtonXMLOnly.AutoSize = true;
-            this.radioButtonXMLOnly.Location = new System.Drawing.Point(296, 257);
+            this.radioButtonXMLOnly.Location = new System.Drawing.Point(395, 316);
+            this.radioButtonXMLOnly.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButtonXMLOnly.Name = "radioButtonXMLOnly";
-            this.radioButtonXMLOnly.Size = new System.Drawing.Size(90, 17);
+            this.radioButtonXMLOnly.Size = new System.Drawing.Size(116, 21);
             this.radioButtonXMLOnly.TabIndex = 4;
             this.radioButtonXMLOnly.Text = "XML files only";
             this.radioButtonXMLOnly.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1067, 554);
             this.Controls.Add(this.radioButtonXMLOnly);
             this.Controls.Add(this.radioButtonBoth);
             this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.ButtonXML);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Main";
             this.Text = "GiST Config";
             this.Load += new System.EventHandler(this.Main_Load);
