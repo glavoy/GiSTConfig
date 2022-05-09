@@ -36,6 +36,7 @@ Instructions for Excel data dictionary:
 		phone_num:		Short Text		Allows only numbers in Text box; 10 characters in the database
 		integer:		Long Integer
 		text_integer	Long Integer	Allows only numbers in Text box
+		text_id			Text			Allows only numbers in Text box
 		text_decimal	Decimal			Allows only numbers and decimal point in Text box; Precision = 13; Scale = 5
 		hourmin			Short Text		Allows only numbers and colon in Text box; 5 characters in the database
 		
