@@ -53,8 +53,8 @@ namespace generatexml
         //***************************
         // Path to Excel file - this is the path to the Data Dictionary you want to use
         //readonly string excelFile = "C:\\Users\\glavoy\\Box\\2. SEARCH SAPPHIRE\\15-DataTeam\\DataDictionaries\\PhaseB\\Tablet\\SEARCH 2.0 Tablet Data Capture 2023-05-xx.xlsx";
-        //readonly string excelFile = "D:\\Temp\\OPAL DD 2023-05-07.xlsx";
-        readonly string excelFile = "C:\\Users\\glavoy\\Dropbox\\IDRC\\Zumba\\Data Dictionary\\Zumba Data Dictionary 2023-05-xx.xlsx";
+        readonly string excelFile = "D:\\Temp\\Sample Data Dictionary.xlsx";
+        //readonly string excelFile = "C:\\Users\\glavoy\\Dropbox\\IDRC\\Zumba\\Data Dictionary\\Zumba Data Dictionary 2023-05-xx.xlsx";
 
 
         //***************************
@@ -62,8 +62,8 @@ namespace generatexml
         // Feel free to change this to whatever you want
         //readonly string xmlPath = "D:\\IDRC\\Applications\\SapphirePhaseB\\Clinic\\xml\\";
         //readonly string xmlPath = "C:\\Users\\glavoy\\Dropbox\\IDRC\\SEARCHSapphire_PhaseB\\Applications\\Clinic\\xml\\";
-        //readonly string xmlPath = "D:\\Temp\\";
-        readonly string xmlPath = "C:\\Users\\glavoy\\Dropbox\\IDRC\\Zumba\\Applications\\Zumba\\xml\\";
+        readonly string xmlPath = "D:\\Temp\\";
+        //readonly string xmlPath = "C:\\Users\\glavoy\\Dropbox\\IDRC\\Zumba\\Applications\\Zumba\\xml\\";
 
 
         //***************************
@@ -78,8 +78,8 @@ namespace generatexml
         //readonly string accessDB = "C:\\SapphirePhaseB\\Clinic\\MSAccessDatabase\\SapphirePhaseB_Clinic.mdb";
         //readonly string accessDB = "C:\\SONET\\FollowupSurvey\\MSAccessDatabase\\SONET_Followup.mdb";
         //readonly string accessDB = "C:\\SONET\\SocialNetwork\\MSAccessDatabase\\SONET_Social_Network.mdb";
-        readonly string accessDB = "C:\\Zumba\\MSAccessDatabase\\zumba.mdb";
-        //readonly string accessDB = "D:\\Temp\\opal.mdb";
+        //readonly string accessDB = "C:\\Zumba\\MSAccessDatabase\\zumba.mdb";
+        readonly string accessDB = "D:\\Temp\\sample.mdb";
 
 
 
