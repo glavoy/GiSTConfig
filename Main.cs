@@ -10,11 +10,6 @@ using Microsoft.Office.Interop.Excel;
 using System.Data.OleDb;
 using System.Data;
 using System.Text.RegularExpressions;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Status;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
-using System.Collections;
-using static generatexml.Main;
 using System.Text;
 
 namespace generatexml
@@ -50,63 +45,60 @@ namespace generatexml
         //**********************************************************************************************************************************************************************
         //**********************************************************************************************************************************************************************
 
+
+
+
+        //Sapphire
         //***************************
         // Path to Excel file - this is the path to the Data Dictionary you want to use
-        //readonly string excelFile = "C:\\Users\\glavoy\\Box\\2. SEARCH SAPPHIRE\\15-DataTeam\\DataDictionaries\\PhaseB\\Tablet\\SEARCH 2.0 Tablet Data Capture 2023-05-xx.xlsx";
-        readonly string excelFile = "D:\\Temp\\Sample Data Dictionary.xlsx";
-        //readonly string excelFile = "C:\\Users\\glavoy\\Dropbox\\IDRC\\Zumba\\Data Dictionary\\Zumba Data Dictionary 2023-05-xx.xlsx";
-
+        readonly string excelFile = "C:\\Users\\glavoy\\Box\\2. SEARCH SAPPHIRE\\15-DataTeam\\DataDictionaries\\PhaseB\\Tablet\\SEARCH 2.0 Tablet Data Capture 2024-06-06.xlsx";
 
         //***************************
         // Path to XML file - this is where the generated xml files wil be written
-        // Feel free to change this to whatever you want
-        //readonly string xmlPath = "D:\\IDRC\\Applications\\SapphirePhaseB\\Clinic\\xml\\";
-        //readonly string xmlPath = "C:\\Users\\glavoy\\Dropbox\\IDRC\\SEARCHSapphire_PhaseB\\Applications\\Clinic\\xml\\";
-        readonly string xmlPath = "D:\\Temp\\";
-        //readonly string xmlPath = "C:\\Users\\glavoy\\Dropbox\\IDRC\\Zumba\\Applications\\Zumba\\xml\\";
-
+        readonly string xmlPath = "C:\\Users\\glavoy\\Dropbox\\IDRC\\SEARCHSapphire_PhaseB\\Applications\\Clinic\\gist\\xml\\";
 
         //***************************
         // Path to log file
-        // Feel free to change this to whatever you want
-        readonly string logfilePath = "D:\\Temp\\";
-
+        readonly string logfilePath = "C:\\temp\\";
 
         //***************************
         // Path to MS Access database
-        // Feel free to change this to whatever you want
-        //readonly string accessDB = "C:\\SapphirePhaseB\\Clinic\\MSAccessDatabase\\SapphirePhaseB_Clinic.mdb";
-        //readonly string accessDB = "C:\\SONET\\FollowupSurvey\\MSAccessDatabase\\SONET_Followup.mdb";
-        //readonly string accessDB = "C:\\SONET\\SocialNetwork\\MSAccessDatabase\\SONET_Social_Network.mdb";
-        //readonly string accessDB = "C:\\Zumba\\MSAccessDatabase\\zumba.mdb";
-        readonly string accessDB = "D:\\Temp\\sample.mdb";
-
-
+        readonly string accessDB = "C:\\SapphirePhaseB\\Clinic\\MSAccessDatabase\\SapphirePhaseB_Clinic.mdb";
 
         //***************************
         // Source database to copy tables
-        //public string sourceDatabasePath = "C:\\SapphirePhaseB\\Clinic\\MSAccessDatabase\\SapphirePhaseB_Clinic - Master and Villages.mdb";
-        public string sourceDatabasePath = "C:\\Zumba\\MSAccessDatabase\\zumba - master.mdb";
-
+        public string sourceDatabasePath = "C:\\SapphirePhaseB\\Clinic\\MSAccessDatabase\\SapphirePhaseB_Clinic - Master and Villages.mdb";
 
         //***************************
         // name of the source tables to copy
-        // This is for Sapphire Phase B
-        //public string[] sourceTableNames = {"census_survey", "census_survey_bak", "clinic_names", "htn_dose", "htn_med_name", "htn_strength", "tablet_profile", "tablet_profile_bak", "villages" };
-
-        // This is for Zumba
-        public string[] sourceTableNames = { "villages" };
+        public string[] sourceTableNames = { "census_survey", "census_survey_bak", "clinic_names", "htn_dose", "htn_med_name", "htn_strength", "tablet_profile", "tablet_profile_bak", "villages", "fingerprints", "leap_prev", "leap_prev_bak", "appointment", "appointment_bak", "checkin_bak", "metrics_downloads", "metrics_patient_profile", "opal_venue_list" };
 
 
 
+        ////OPAL Aim2
+        ////***************************
+        //// Path to Excel file - this is the path to the Data Dictionary you want to use
+        //readonly string excelFile = "C:\\Users\\glavoy\\Dropbox\\IDRC\\SEARCHSapphire_PhaseB\\DataDictionary\\OPAL_Aim_2_Survey_DD_2024-06-18.xlsx";
 
+        ////***************************
+        //// Path to XML file - this is where the generated xml files wil be written
+        //readonly string xmlPath = "C:\\Users\\glavoy\\Dropbox\\IDRC\\SEARCHSapphire_PhaseB\\Applications\\Clinic\\gist\\xml\\";
 
+        ////***************************
+        //// Path to log file
+        //readonly string logfilePath = "C:\\temp\\";
 
+        ////***************************
+        //// Path to MS Access database
+        //readonly string accessDB = "C:\\SapphirePhaseB\\Clinic\\MSAccessDatabase\\OPALAim2.mdb";
 
+        ////***************************
+        //// Source database to copy tables
+        //public string sourceDatabasePath = "C:\\SapphirePhaseB\\Clinic\\MSAccessDatabase\\SapphirePhaseB_Clinic - Master and Villages.mdb";
 
-
-
-
+        ////***************************
+        //// name of the source tables to copy
+        //public string[] sourceTableNames = { };
 
 
         //log string
@@ -217,10 +209,11 @@ namespace generatexml
                             // Create the crfs table
                             CreateCrfsTable();
                             AddDataToTable(worksheet);
-                            CopyMasterTables(); // This copies the villages table and census survey table - comment this code out 
+                            // CopyMasterTables(); // This copies the villages table and census survey table - comment this code out 
                         }
                     }
                 }
+                CopyMasterTables(); // This copies the villages table and census survey table - comment this code out 
 
                 // Show the appropriate Message Box
                 if (errorsEncountered)
@@ -392,6 +385,14 @@ namespace generatexml
 
                             // Get the responses and then ensure that all questions and field types are correctly defined
                             curQuestion.responses = range.Cells[rowCount, 6] != null && range.Cells[rowCount, 6].Value2 != null ? range.Cells[rowCount, 6].Value2.ToString() : "";
+                            // Need to check for blank reponses, but sometimes they are supposed to be blank if they are dynamically generated
+                            //if (curQuestion.responses == "" && curQuestion.questionType == "radio")
+                            //{
+                            //    errorsEncountered = true;
+                            //    worksheetErrorsEncountered = true;
+                            //    logstring.Add("ERROR - Responses: FieldName '" + curQuestion.fieldName + "' in worksheet '" + worksheet.Name + "' does not have any responses.");
+                            //}
+
                             CheckQuestionFieldType(curQuestion.questionType, curQuestion.fieldType, curQuestion.fieldName, worksheet.Name, curQuestion.responses);
 
                             // Get Lower range
@@ -1217,7 +1218,7 @@ namespace generatexml
                 foreach (Question question in QuestionList)
                 {
                     curFieldname = question.fieldName;
-                    if ((question.fieldType == "text" || question.fieldType == "text_integer" || question.fieldType == "phone_num") && question.questionType != "automatic" && question.questionType != "checkbox")
+                    if ((question.fieldType == "text" || question.fieldType == "text_integer" || question.fieldType == "phone_num") && question.questionType != "automatic" && question.questionType != "checkbox" && question.questionType != "combobox")
                     {
                         if (question.maxCharacters == "-9")
                         {
@@ -1406,7 +1407,7 @@ namespace generatexml
                         }
 
                         // Write responses if it is a radio or checkbox type question
-                        if (question.questionType == "radio" || question.questionType == "checkbox")
+                        if (question.questionType == "radio" || question.questionType == "checkbox" || question.questionType == "combobox")
                         {
                             outputFile.WriteLine("\t\t<responses>");
                             string[] responses = question.responses.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
@@ -1588,7 +1589,7 @@ namespace generatexml
 
         // Added by Werick
         //////////////////////////////////////////////////////////////////////
-        // Function to generate the text for the logid checks
+        // Function to generate the text for the logic checks
         //////////////////////////////////////////////////////////////////////
         private string GenerateLogicChecks(string logic, string logicType)
         {
@@ -1627,13 +1628,25 @@ namespace generatexml
 
             // Variables to store the condition and the value of the skip
             string condition;
+            string condition2 = "=";
             string value;
             string currentresponse = "1";
+            string pattern = @"(=|<>|<|<=|>|>=)";
 
             //set the current response for fixed logic types
             if (logicType == "fixed")
             {
                 currentresponse = logic_section.Substring(spaceIndicesLogic[spaceIndicesLogic.Count - 1] + 1);
+                foreach (var testString in logic_section)
+                {
+                    var matches = Regex.Matches(logic_section, pattern);
+                    if (matches.Count > 0)
+                    {
+                        var lastMatch = matches[matches.Count - 1];
+                        condition2 = lastMatch.Value;
+                        condition2 = condition2.Replace("<", "&lt;").Replace(">", "&gt;");
+                    }
+                }
             }
 
             // If there are 6 spaces in the logic section, then we know that the condition is 'does not contain'
@@ -1644,7 +1657,7 @@ namespace generatexml
                 // Get the value
                 value = logic_section.Substring(spaceIndicesLogic[spaceIndicesLogic.Count - 1] + 1);
             }
-            // Check if the skip has 'contains'
+            // Check if the condition has 'contains'
             else if (logic_section.Contains("contains"))
             {
                 // Get the condition
@@ -1690,10 +1703,11 @@ namespace generatexml
             // Build the string and return it
             return string.Concat("\t\t\t<logic fieldname='", fieldname_to_check,
                                  "' condition = '", condition,
-                                 "' response='", value,
-                                 "' response_type='", logicType,
-                                 "' currentresponse='", currentresponse,
-                                 "' message ='", error_message, "'></logic>");
+                                 "' response = '", value,
+                                 "' response_type = '", logicType,
+                                 "' condition2 = '", condition2,
+                                 "' currentresponse = '", currentresponse,
+                                 "' message = '", error_message, "'></logic>");
         }
 
 
@@ -1755,7 +1769,7 @@ namespace generatexml
                 foreach (Question question in QuestionList)
                 {
                     // Don't need to create a field for 'information' questions
-                    if (question.questionType != "information")
+                    if (question.questionType != "information" && question.fieldType != "n/a")
                     {
                         // Create a field
                         ADOX.ColumnClass newCol = new ADOX.ColumnClass
