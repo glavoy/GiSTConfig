@@ -1,9 +1,52 @@
-# GiSTConfig Instructions
+Ôªø# GiSTConfig Instructions
 
-This software will generate XML files from an Excel file containing a Data Dictionary. It also creates an MS Access databse with a table for each worksheet.
-Note the worksheets in the Excel data dictionary must be named with '_dd' appended to the name in order to create tables and xml files.
-Alternatively, you can append the worksheet name with '__xml' and only an xml file will be created. All othere worksheets are ignored.
 
+## Master Database and Table Copying Instructions
+
+This software includes functionality to **generate XML files** and **create MS Access databases** based on a provided Excel file containing data dictionaries. It also supports copying reference tables from a corresponding master database.
+
+---
+
+### Step 1: Excel File Naming Rules
+
+- Each **worksheet** in the Excel file must be named according to the following rules:
+  
+  | Worksheet Name Suffix | Action |
+  |------------------------|--------|
+  | `_dd`                 | Creates an MS Access **table** and an associated **XML** file |
+  | `_xml`               | Creates an **XML** file **only** (no table created) |
+  | *(Any other name)*    | Worksheet is **ignored** |
+
+> ‚úÖ Use `_dd` if you want both XML and a table in Access.  
+> ‚úÖ Use `_xml` if you only want an XML file.  
+> ‚ùå Do not use any other naming if you expect the sheet to be processed.
+
+---
+
+### Step 2: Create the Master Database
+
+- For every new database (e.g. `SONET_NCF_Pilot.mdb`), you may want to create a **corresponding master database** with the **same name**, followed by **` - Master.mdb`**.
+
+  **Example:**
+  - New Database: `SONET_NCF_Pilot.mdb`
+  - Master Database: `SONET_NCF_Pilot - Master.mdb`
+
+- The software will look for this master database during initialization to copy over any required preloaded or reference tables.
+
+---
+
+### Step 3: Copying Tables from Master
+
+- When the new database is being created, the software will:
+  1. Locate the corresponding **master database**.
+  2. Copy specific **predefined tables** from the master database into the new database.
+
+> ‚ö†Ô∏è Make sure the master database is in the **same directory** or an accessible path for the software to locate it.
+
+- **Specify the list of source tables to be copied** in the appropriate configuration file or code section.
+
+
+- ### Step 4: Setting variables
 Before running the program, set the following variables in the `GiSTConfig.cs` file:
 
 
@@ -66,13 +109,13 @@ These define how a question appears to the interviewer/respondent.
 
 | **QuestionType** | **Description** |
 |------------------|------------------|
-| `radio`          | Radio Buttons ñ FieldType must be `integer` |
-| `combobox`       | Dropdown menu ñ FieldType must be `integer` |
-| `checkbox`       | Checkboxes ñ FieldType must be `text` |
-| `text`           | Text Box ñ Must include `MaxCharacters` |
+| `radio`          | Radio Buttons ‚Äì FieldType must be `integer` |
+| `combobox`       | Dropdown menu ‚Äì FieldType must be `integer` |
+| `checkbox`       | Checkboxes ‚Äì FieldType must be `text` |
+| `text`           | Text Box ‚Äì Must include `MaxCharacters` |
 | `date`           | Date Picker |
-| `information`    | Displays information only ñ not saved to database |
-| `automatic`      | Automatically answered by software ñ logic must be added to `AddAutomatic()` |
+| `information`    | Displays information only ‚Äì not saved to database |
+| `automatic`      | Automatically answered by software ‚Äì logic must be added to `AddAutomatic()` |
 
 ---
 
@@ -82,15 +125,15 @@ These define how the data is stored in the database.
 
 | **FieldType**   | **Description** |
 |------------------|------------------|
-| `text`           | Short Text ñ Accepts any characters (default 255) |
+| `text`           | Short Text ‚Äì Accepts any characters (default 255) |
 | `datetime`       | Date/Time |
 | `date`           | Date only |
-| `phone_num`      | Short Text ñ Only numbers allowed; 10 characters |
+| `phone_num`      | Short Text ‚Äì Only numbers allowed; 10 characters |
 | `integer`        | Long Integer |
-| `text_integer`   | Long Integer ñ Only numbers allowed in input |
-| `text_id`        | Text ñ Only numeric values allowed |
-| `text_decimal`   | Decimal ñ Allows numbers and decimal point; precision = 13, scale = 5 |
-| `hourmin`        | Short Text ñ Only numbers and colon allowed (format HH:MM) |
+| `text_integer`   | Long Integer ‚Äì Only numbers allowed in input |
+| `text_id`        | Text ‚Äì Only numeric values allowed |
+| `text_decimal`   | Decimal ‚Äì Allows numbers and decimal point; precision = 13, scale = 5 |
+| `hourmin`        | Short Text ‚Äì Only numbers and colon allowed (format HH:MM) |
 
 ---
 
