@@ -35,60 +35,102 @@ public string[] sourceTableNames = { "bl_complete", "hhmembers", "households", "
 ```
 
 
+
 # Excel Data Dictionary Instructions
 
-## Header Structure
-1. First row must be the header row
+These are the required standards and formatting rules for preparing data dictionaries used in surveys and forms.
 
-## Skip Logic Format
-2. Skip must be of the format - `skiptype: if fieldname_to_check condition value, skip to fieldname_to_skip_to`
-   - Begins with "skiptype: " (skiptype, colon, space)
-   - **skiptype**: "postskip" or "preskip"
-   - **fieldname_to_check**: which field name to check
-   - **condition**: =, <, >, <=, >=, <>, 'does not contain', 'contains'
-   - **value**: value to check against the value in fieldname_to_check
-   - **fieldname_to_skip_to**: where to skip
-   - *It is very important to have SINGLE SPACES between each part*
+---
 
-## Field Specifications
-3. For fields that are QuestionType = text and FieldType = text, you should specify the MaxCharacters
-4. DontKnow, Refuse, NA - each are specified in their own column. Must be TRUE or blank
-5. Do not include DontKnow, Refuse, NA in radio/checkbox responses
-6. LowerRange and UpperRange are continuous and both have to have a number or both be blank
-7. DD must have the same 13 columns
-8. Responses must begin with "1:" - (number, colon)
+## 1. Header and Worksheet Structure
 
-## Question Types
-9. QuestionType:
-   | Questionnaire | Comment |
-   |---------------|---------|
-   | radio | Radio Buttons - fieldtype MUST be integer |
-   | combobox | Dropdown - fieldtype MUST be integer |
-   | checkbox | Checkboxes - fieldtype MUST be text |
-   | text | TextBox - should specify the MaxCharacters |
-   | date | Date Picker |
-   | information | Displays information on screen. Not saved to database |
-   | automatic | Question is automatically responded to by the software. Code MUST to be written in the AddAutomatic() function |
+- The **first row** of each worksheet **must be the header row**.
+- All **non-question rows** (e.g. section headers, instructions) **must have merged cells**.
+- Worksheets that contain a data dictionary must **end with `_dd` or `_xml`** in their name.
 
-## Field Types
-10. FieldType:
-    | Database | Comment |
-    |----------|---------|
-    | text | Short Text - Allows any character, default is 255 characters |
-    | datetime | Date/Time |
-    | date | Date/Time |
-    | phone_num | Short Text - Allows only numbers in Text box; 10 characters in the database |
-    | integer | Long Integer |
-    | text_integer | Long Integer - Allows only numbers in Text box |
-    | text_id | Text - Allows only numbers in Text box |
-    | text_decimal | Decimal - Allows only numbers and decimal point in Text box; Precision = 13; Scale = 5 |
-    | hourmin | Short Text - Allows only numbers and colon in Text box; 5 characters in the database |
+---
 
-## Worksheet Structure
-11. All rows that are not questions must be merged cells
-12. All Worksheets that contain a data dictionary must end in "_dd"
+## 2. Required Columns and Format
 
-## Logic Checks
-13. Logic checks:
-    - **dynamic**: `if intvinit2 <> intvinit, error_message This does not match your previous entry!`
-    - **fixed**: `if month = 2 'and' day = 30, error_message throw an error`
+- The data dictionary must always have **13 columns**, with the following fields (order must be consistent).
+- Fields for `DontKnow`, `Refuse`, and `NA` must each be in **separate columns**, and can only be **TRUE** or left **blank**.
+- `MaxCharacters` must be specified for **QuestionType = text** and **FieldType = text**.
+- `LowerRange` and `UpperRange` must either both be **numeric values** or both left **blank**.
+- For all multiple-choice fields (`radio`, `checkbox`, `combobox`), **responses must begin with `1:`** (e.g. `1:Yes`, `2:No`).
+
+---
+
+## 3. Question Types
+
+These define how a question appears to the interviewer/respondent.
+
+| **QuestionType** | **Description** |
+|------------------|------------------|
+| `radio`          | Radio Buttons – FieldType must be `integer` |
+| `combobox`       | Dropdown menu – FieldType must be `integer` |
+| `checkbox`       | Checkboxes – FieldType must be `text` |
+| `text`           | Text Box – Must include `MaxCharacters` |
+| `date`           | Date Picker |
+| `information`    | Displays information only – not saved to database |
+| `automatic`      | Automatically answered by software – logic must be added to `AddAutomatic()` |
+
+---
+
+## 4. Field Types
+
+These define how the data is stored in the database.
+
+| **FieldType**   | **Description** |
+|------------------|------------------|
+| `text`           | Short Text – Accepts any characters (default 255) |
+| `datetime`       | Date/Time |
+| `date`           | Date only |
+| `phone_num`      | Short Text – Only numbers allowed; 10 characters |
+| `integer`        | Long Integer |
+| `text_integer`   | Long Integer – Only numbers allowed in input |
+| `text_id`        | Text – Only numeric values allowed |
+| `text_decimal`   | Decimal – Allows numbers and decimal point; precision = 13, scale = 5 |
+| `hourmin`        | Short Text – Only numbers and colon allowed (format HH:MM) |
+
+---
+
+## 5. Responses
+
+- Multiple-choice responses must follow the format `1:Yes`, `2:No`, etc.
+- Do **not** include `DontKnow`, `Refuse`, or `NA` as response options in **radio** or **checkbox** fields. These are captured in their own columns.
+
+---
+
+## 6. Skip Logic
+
+Use the following format for skip patterns:
+
+```
+skiptype: if fieldname_to_check condition value, skip to fieldname_to_skip_to
+```
+
+**Rules:**
+- `skiptype`: either `preskip` or `postskip`
+- `condition`: one of `=`, `<`, `>`, `<=`, `>=`, `<>`, `contains`, `does not contain`
+- Must use **single spaces** between each element
+- Example:  
+  ```
+  postskip: if gender = 2, skip to pregnancy_status
+  ```
+
+---
+
+## 7. Logic Checks
+
+Use logic checks to validate relationships between responses.
+
+- **Dynamic logic check (across questions):**  
+  ```
+  if intvinit2 <> intvinit, error_message This does not match your previous entry!
+  ```
+
+- **Fixed logic check (internal to one field):**  
+  ```
+  if month = 2 'and' day = 30, error_message throw an error
+  ```
+
