@@ -37,7 +37,7 @@ namespace generatexml
         Boolean worksheetErrorsEncountered = false;
 
         // Version
-        readonly string swVer = "2025-04-09";
+        readonly string swVer = "2025-11-09";
 
 
 
