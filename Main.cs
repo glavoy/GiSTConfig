@@ -48,33 +48,61 @@ namespace generatexml
         //**********************************************************************************************************************************************************************
 
 
-        //SONET NCF Pilot
+        //LLINEUP3 - 24 month
         //***************************
         // Path to Excel file - this is the path to the Data Dictionary you want to use
-        readonly string excelFile = "C:\\Users\\glavoy\\Box\\SONET R01-UCSF and IDRC\\PILOTS- current 2025\\Pilot 1- Network case finding\\Final instruments\\SONET Data Dictionary NCF Surveys 2025-04-08.xlsx";
+        readonly string excelFile = "C:\\Users\\glavoy\\Dropbox\\IDRC\\PRISM3\\LLINEUP3\\PRISM_Comprehensive_CSS_Data_Dictionary_2025_10_22.xlsx";
 
         //***************************
-        // Path to XML file - this is where the generated xml files will be written
-        readonly string xmlPath = "C:\\Users\\glavoy\\Dropbox\\IDRC\\SONET2\\Applications\\sonet_ncf_pilot\\xml\\";
+        // Path to XML file - this is where the generated xml files wil be written
+        readonly string xmlPath = "C:\\GeoffOffline\\Infectious-Diseases-Research-Collab\\LLINEUP3-24months\\xml\\";
 
         //***************************
-        // Path to log file - keeps track of errors
+        // Path to log file
         readonly string logfilePath = "C:\\temp\\";
 
         //***************************
-        // Path to MS Access database - will be created
-        readonly string accessDB = "C:\\SONET\\NCF_Pilot\\MSAccessDatabase\\SONET_NCF_Pilot.mdb";
+        // Path to MS Access database
+        readonly string accessDB = "C:\\PRISMCOMP\\MSAccessDatabase\\PRISMCOMP.mdb";
+
+        //***************************
+        // Source database to copy tables
+        public string sourceDatabasePath = "C:\\PRISMCOMP\\MSAccessDatabase\\PRISMCOMP_config.mdb";
 
         //***************************
         // name of the source tables to copy
-        // Create a MS Access databse with the name as the database above, except with " - master" appended to the name
-        // For example, 'SONET_NCF_Pilot.mdb' and 'SONET_NCF_Pilot - Master.mdb'
-        // The software will look for this database to copy the tables from. Below is a list of tables you want to copy from the 'master' to the newly created MS Access databse.
-        public string[] sourceTableNames = { "bl_complete", "hhmembers", "households", "sn_complete", "tb_cases", "villages", "fingerprints", "config", "formchanges", "audittrail" };
+
+        public string[] sourceTableNames = { "config", "mrcvillage", "netbrands", "providers", "schools" };
 
 
 
 
+
+
+        ////Sample
+        ////***************************
+        //// Path to Excel file - this is the path to the Data Dictionary you want to use
+        //readonly string excelFile = "C:\\temp\\Sample.xlsx";
+
+        ////***************************
+        //// Path to XML file - this is where the generated xml files wil be written
+        //readonly string xmlPath = "C:\\temp\\xml\\";
+
+        ////***************************
+        //// Path to log file
+        //readonly string logfilePath = "C:\\temp\\";
+
+        ////***************************
+        //// Path to MS Access database
+        //readonly string accessDB = "C:\\temp\\accessdb\\sample.mdb";
+
+        ////***************************
+        //// Source database to copy tables
+        //public string sourceDatabasePath = "C:\\SapphirePhaseB\\Clinic\\MSAccessDatabase\\SapphirePhaseB_Clinic - Master and Villages.mdb";
+
+        ////***************************
+        //// name of the source tables to copy
+        //public string[] sourceTableNames = {};
 
 
         //log string
@@ -337,7 +365,7 @@ namespace generatexml
                             // Get the fieldName and verify it
                             curQuestion.fieldName = range.Cells[rowCount, 1] != null && range.Cells[rowCount, 1].Value2 != null ? range.Cells[rowCount, 1].Value2.ToString() : "";
                             CheckFieldName(worksheet.Name, curQuestion.fieldName);
-
+                            
                             // Get the questionType
                             curQuestion.questionType = range.Cells[rowCount, 2] != null && range.Cells[rowCount, 2].Value2 != null ? range.Cells[rowCount, 2].Value2.ToString() : "";
 
